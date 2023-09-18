@@ -61,3 +61,24 @@ const deleteUsers = async (id) => {
     console.log(error);
   }
 };
+
+const fullname = document.getElementById("name");
+const email = document.getElementById("email");
+const website = document.getElementById("website");
+
+let myModal = new bootstrap.Modal(document.getElementById("exampleModal"));
+
+const postUser = async () => {
+  try {
+    const res = await axios.post("https://jsonplaceholder.typicode.com/users", {
+      name: fullname.value,
+      email: email.value + "@gmail.com",
+      website: website.value,
+    });
+
+    setUsers();
+    myModal.hide();
+  } catch (error) {
+    console.log(error);
+  }
+};
