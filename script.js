@@ -1,4 +1,5 @@
 const tbody = document.querySelector("tbody");
+const btnEdit = document.getElementById("btnEdit");
 
 const getUsers = async () => {
   try {
@@ -12,7 +13,7 @@ const getUsers = async () => {
 
 const setUsers = async () => {
   const users = await getUsers();
-  console.log(users);
+  // console.log(users);
   tbody.innerHTML = "";
 
   users.map((user, index) => {
@@ -32,7 +33,13 @@ const setUsers = async () => {
     } </a></td>
         <td>${user.company.name}</td>
         <td class="d-flex">
-            <button class="btn btn-dark me-2">
+            <button class="btn btn-dark me-2" 
+              type="button"
+              class="btn btn-primary"
+              data-bs-toggle="modal"
+              data-bs-target="#exampleModalEdit"
+              
+            >
                 <i class="fas fa-edit"></i>
             </button>
             <button class="btn btn-danger me-2" onclick="deleteUsers(${
@@ -62,22 +69,60 @@ const deleteUsers = async (id) => {
   }
 };
 
-const fullname = document.getElementById("name");
+const fullName = document.getElementById("name");
 const email = document.getElementById("email");
 const website = document.getElementById("website");
+const myModal = new bootstrap.Modal("#exampleModal");
 
-let myModal = new bootstrap.Modal(document.getElementById("exampleModal"));
+const clearValue = () => {
+  fullName.value = "";
+  email.value = "";
+  website.value = "";
+  nameEdit.value = "";
+  emailEditing.value = "";
+  websiteEdit.value = "";
+};
 
 const postUser = async () => {
   try {
     const res = await axios.post("https://jsonplaceholder.typicode.com/users", {
-      name: fullname.value,
+      name: fullName.value,
       email: email.value + "@gmail.com",
       website: website.value,
     });
-
+    alert("Muvaffaqiyatli qo`shildi!");
     setUsers();
     myModal.hide();
+    clearValue();
+  } catch (error) {
+    console.log(error);
+  }
+
+  // myModal.hide();
+};
+
+const nameEdit = document.getElementById("nameEdit");
+const emailEditing = document.getElementById("emailEditing");
+const websiteEdit = document.getElementById("websiteEdit");
+const myModalEdit = new bootstrap.Modal("#exampleModalEdit");
+
+const putUser = async () => {
+  try {
+    const res = await axios.put(
+      "https://jsonplaceholder.typicode.com/users/1",
+      {
+        name: nameEdit.value,
+        email: emailEditing.value + "gmail.com",
+        website: websiteEdit,
+      }
+    );
+
+    alert("Muvaffaqiyatli o`zgartirildi!");
+    // console.log(res.data);
+    // return res.data;
+    setUsers();
+    myModalEdit.hide();
+    clearValue();
   } catch (error) {
     console.log(error);
   }
